@@ -45,9 +45,44 @@ function SHighLight ($document) {
 
     // Transform comments
     $document = preg_replace(
-                    "'((?:#|//)[^\n]*|/\*.*?\*/)'si",
-                    "<span style='color: #244ECC;'>\\1</span>",
-                    $document
-                );
-    
+        "'((?:#|//)[^\n]*|/\*.*?\*/)'si",
+        "<span style='color: #244ECC;'>\\1</span>",
+        $document
+    );
+
+    // Line breaks
+    $document = preg_replace(
+        "'(\n)'si",
+        "<br>\\1",
+        $document
+    );
+
+    // Transform functions
+    $document = preg_replace(
+        "'([\w]+)([\s]*)[\(]'si",
+        "<span style='color: #0000CC;'><b>\\1</b></span>\\2(",
+        $document
+    );
+
+    // Transform operators
+
+    $operator = array(
+        "'\,'si",
+        "'\-'si",
+        "'\+'si",
+        "'\('si",
+        "'\)'si",
+        "'\{'si",
+        "'\}'si",
+    );
+    $replace = array(
+        "<span style='color: #1A691A;'>,</span>",
+        "<span style='color: #1A691A;'>-</span>",
+        "<span style='color: #1A691A;'>+</span>",
+        "<span style='color: #1A691A;'>(</span>",
+        "<span style='color: #1A691A;'>)</span>",
+        "<span style='color: #1A691A;'>{</span>",
+        "<span style='color: #1A691A;'>}</span>",
+    );
+    $document = preg_replace($operator, $replace, $document);
 }
