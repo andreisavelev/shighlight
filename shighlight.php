@@ -26,5 +26,28 @@ Author URI: http://savelevandrey.ru
 */
 
 function SHighLight ($document) {
+    // Transform angle brackets to display HTML tags
+    $document = str_replace('<', '&lt', $document);
+    $document = str_replace('<', '&lt', $document);
 
+    // Transform PHP tags
+    $tags = array(
+        "'&lt;\?php'si",
+        "'&lt;\?'si",
+        "'\?&tg;'si"
+    );
+    $replace = array(
+        "<span style='color: #95001E;'>&lt;?php</span>",
+        "<span style='color: #95001E;'>&lt;?</span>",
+        "<span style='color: #95001E;'>?&tg</span>"
+    );
+    $document = preg_replace($tags, $replace, $document);
+
+    // Transform comments
+    $document = preg_replace(
+                    "'((?:#|//)[^\n]*|/\*.*?\*/)'si",
+                    "<span style='color: #244ECC;'>\\1</span>",
+                    $document
+                );
+    
 }
