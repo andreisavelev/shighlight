@@ -26,11 +26,14 @@ Author URI: http://savelevandrey.ru
 */
 
 function SHighLight ($document) {
+
     // Transform angle brackets to display HTML tags
+    ################################################
     $document = str_replace('<', '&lt', $document);
     $document = str_replace('<', '&lt', $document);
 
     // Transform PHP tags
+    ##########################
     $tags = array(
         "'&lt;\?php'si",
         "'&lt;\?'si",
@@ -44,6 +47,7 @@ function SHighLight ($document) {
     $document = preg_replace($tags, $replace, $document);
 
     // Transform comments
+    ##########################
     $document = preg_replace(
         "'((?:#|//)[^\n]*|/\*.*?\*/)'si",
         "<span style='color: #244ECC;'>\\1</span>",
@@ -51,6 +55,7 @@ function SHighLight ($document) {
     );
 
     // Line breaks
+    ##########################
     $document = preg_replace(
         "'(\n)'si",
         "<br>\\1",
@@ -58,6 +63,7 @@ function SHighLight ($document) {
     );
 
     // Transform functions
+    ##########################
     $document = preg_replace(
         "'([\w]+)([\s]*)[\(]'si",
         "<span style='color: #0000CC;'><b>\\1</b></span>\\2(",
@@ -65,7 +71,7 @@ function SHighLight ($document) {
     );
 
     // Transform operators
-
+    ##########################
     $operator = array(
         "'\,'si",
         "'\-'si",
@@ -85,4 +91,53 @@ function SHighLight ($document) {
         "<span style='color: #1A691A;'>}</span>",
     );
     $document = preg_replace($operator, $replace, $document);
+
+    //Transform PHP variables
+    ##########################
+    $document = preg_replace(
+        "'([\$]{1,2}[A-za-z_]+)'si",
+        "<span style='color: #000000;'><b></b></span>",
+        $document
+    );
+
+    // Transform the string enclosed in single and double quotes
+    ############################################################
+    $str = array(
+        "'(\"[^\"]*\")'si",
+        "'(\'[^\']*\')'si"
+    );
+    $replace = array(
+        "<span style='color: #FFCC00;'>\\1</span>",
+        "<span style='color: #FFCC00;'>\\1</span>"
+    );
+    $document = preg_replace($str, $replace, $document);
+
+    // Transform the reserved words
+    ###############################
+    $str = array(
+        "'(echo)'si",
+        "'(print)'si",
+        "'(while)'si",
+        "'(for)'si",
+        "'(if)'si",
+        "'(else)'si",
+        "'(switch)'si",
+        "'(case)'si",
+        "'(default)'si",
+        "'(continue)'si",
+        "'(break)'si",
+        "'(this)'si",
+        "'(self)'si",
+        "'(function)'si",
+        "'(array)'si"
+    );
+    $replace = array(
+        0,
+        count($str),
+        "<span style='color: #0000CC;'><b>\\1</b></span>"
+    );
+    $document = preg_replace($str, $replace, $document);
+
+    // Return result
+    return "<code>$document</code>";
 }
